@@ -1,0 +1,12 @@
+1) What file format is used for this binary? And what architecture is it compiled for?:
+Objdump reports the application as being compiled for i386:x86-64 architecture.
+File format is reported as elf64-x86-64
+
+2) What are some of the names of segment/sections you find?
+".init", ".plt", ".fini", et cetera.
+
+3) What segment/section contains main (the function) and what is the address of main?:
+main function is in the segment/section of ".text" under the address of "4005f6".
+
+4) Do you see the stack segment anywhere? What about the heap?:
+I'm seeing a lot of "push"s and "pop"s under the ".text" segment.
