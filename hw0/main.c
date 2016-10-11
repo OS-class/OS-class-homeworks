@@ -6,5 +6,6 @@ int main() {
     printf("stack size: %ld\n", 0L);
     printf("process limit: %ld\n", 0L);
     printf("max file descriptors: %ld\n", 0L);
+    printf("Developer");
     return 0;
 }
