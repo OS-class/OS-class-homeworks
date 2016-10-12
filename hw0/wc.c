@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
 void printText(){
     FILE *file;
-    file =fopen("/home/developer/Homeworks/hw0/file.txt", "r");
+    file =fopen("file.txt", "r");
     int count = 0;
     char buf[1000];
     char* str = NULL;
@@ -26,7 +26,7 @@ void printText(){
 
 void numberOfLines(){
     FILE *file;
-    file =fopen("/home/developer/Homeworks/hw0/file.txt", "r");
+    file =fopen("file.txt", "r");
 
     char c;
     int lines = 0, words = 0;
