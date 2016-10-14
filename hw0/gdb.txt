@@ -1,0 +1,7 @@
+1: 	argc = 1;
+2: 	argv = 0x7fffffffe628
+3: 	<main> = 0x4005f6
+4: 	#0 main (argc=1, argv=0x7fffffffe628) at wc.c:5
+	It prints current stack. In our example there is just only one function called. (index = 0)
+5:	It prints current stack frame (local variables, arglist, parent frame, source language and etc.)
+6:	Registers in current stack frame

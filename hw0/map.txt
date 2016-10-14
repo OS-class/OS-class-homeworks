@@ -1,0 +1,10 @@
+1:
+2: 	.interp
+	.dynamic
+	.init_array
+3: Downward. example: -0x4(%rbp)
+4: 	$rbp -> 0x7fffffffe450
+	$rsp -> 0x7fffffffe430
+	{0x7fffffffe450 - 0x7fffffffe430}
+5: It is dynamic. (Random)
+6: Not always.

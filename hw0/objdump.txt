@@ -1,0 +1,72 @@
+1: file format elf64-x86-64; architecture i386:x86-64
+2: .interp .dynsym .text 
+3: 	{
+	
+Call of the main in 0000000000400500 <_start>:
+	{mov    $0x4005f6,%rdi}
+
+00000000004005f6 <main>:
+  4005f6:	55                   	push   %rbp
+  4005f7:	48 89 e5             	mov    %rsp,%rbp
+  4005fa:	48 83 ec 30          	sub    $0x30,%rsp
+  4005fe:	89 7d dc             	mov    %edi,-0x24(%rbp)
+  400601:	48 89 75 d0          	mov    %rsi,-0x30(%rbp)
+  400605:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%rbp)
+  40060c:	8b 45 ec             	mov    -0x14(%rbp),%eax
+  40060f:	89 45 e8             	mov    %eax,-0x18(%rbp)
+  400612:	8b 45 e8             	mov    -0x18(%rbp),%eax
+  400615:	89 45 e4             	mov    %eax,-0x1c(%rbp)
+  400618:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+  40061c:	48 8b 40 08          	mov    0x8(%rax),%rax
+  400620:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
+  400624:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  400628:	be 54 07 40 00       	mov    $0x400754,%esi
+  40062d:	48 89 c7             	mov    %rax,%rdi
+  400630:	e8 ab fe ff ff       	callq  4004e0 <fopen@plt>
+  400635:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  400639:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  40063d:	48 89 c7             	mov    %rax,%rdi
+  400640:	e8 7b fe ff ff       	callq  4004c0 <fgetc@plt>
+  400645:	88 45 e3             	mov    %al,-0x1d(%rbp)
+  400648:	c6 45 e2 73          	movb   $0x73,-0x1e(%rbp)
+  40064c:	48 83 7d f8 00       	cmpq   $0x0,-0x8(%rbp)
+  400651:	75 3a                	jne    40068d <main+0x97>
+  400653:	bf 56 07 40 00       	mov    $0x400756,%edi
+  400658:	e8 43 fe ff ff       	callq  4004a0 <puts@plt>
+  40065d:	b8 00 00 00 00       	mov    $0x0,%eax
+  400662:	eb 64                	jmp    4006c8 <main+0xd2>
+  400664:	83 45 ec 01          	addl   $0x1,-0x14(%rbp)
+  400668:	80 7d e3 0a          	cmpb   $0xa,-0x1d(%rbp)
+  40066c:	75 08                	jne    400676 <main+0x80>
+  40066e:	83 45 e8 01          	addl   $0x1,-0x18(%rbp)
+  400672:	83 45 e4 01          	addl   $0x1,-0x1c(%rbp)
+  400676:	80 7d e3 20          	cmpb   $0x20,-0x1d(%rbp)
+  40067a:	75 0a                	jne    400686 <main+0x90>
+  40067c:	80 7d e2 20          	cmpb   $0x20,-0x1e(%rbp)
+  400680:	74 04                	je     400686 <main+0x90>
+  400682:	83 45 e4 01          	addl   $0x1,-0x1c(%rbp)
+  400686:	0f b6 45 e3          	movzbl -0x1d(%rbp),%eax
+  40068a:	88 45 e2             	mov    %al,-0x1e(%rbp)
+  40068d:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  400691:	48 89 c7             	mov    %rax,%rdi
+  400694:	e8 27 fe ff ff       	callq  4004c0 <fgetc@plt>
+  400699:	88 45 e3             	mov    %al,-0x1d(%rbp)
+  40069c:	80 7d e3 ff          	cmpb   $0xff,-0x1d(%rbp)
+  4006a0:	75 c2                	jne    400664 <main+0x6e>
+  4006a2:	48 8b 75 f0          	mov    -0x10(%rbp),%rsi
+  4006a6:	8b 4d ec             	mov    -0x14(%rbp),%ecx
+  4006a9:	8b 55 e4             	mov    -0x1c(%rbp),%edx
+  4006ac:	8b 45 e8             	mov    -0x18(%rbp),%eax
+  4006af:	49 89 f0             	mov    %rsi,%r8
+  4006b2:	89 c6                	mov    %eax,%esi
+  4006b4:	bf 63 07 40 00       	mov    $0x400763,%edi
+  4006b9:	b8 00 00 00 00       	mov    $0x0,%eax
+  4006be:	e8 ed fd ff ff       	callq  4004b0 <printf@plt>
+  4006c3:	b8 00 00 00 00       	mov    $0x0,%eax
+  4006c8:	c9                   	leaveq 
+  4006c9:	c3                   	retq   
+  4006ca:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+	
+	}
+4: No. I can't explain it. (but maybe we need to store only the procedures (segments/symbols/stacks/registers) in dump)
