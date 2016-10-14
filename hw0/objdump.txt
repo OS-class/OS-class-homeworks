@@ -1,0 +1,90 @@
+1.What file format is used for this binary? And what architecture is it compiled for?
+
+wc:     file format elf64-x86-64
+wc
+architecture: i386:x86-64, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x0000000000400570
+
+
+2.What are some of the names of segment/sections you find?
+
+.init .plt .plt.got .text .fini
+
+
+3.What segment/section contains main (the function) and what is the address of main? (It should
+be the same as what you saw in gdb)
+
+Segment/Section which contains main is .text. The address of main is 0000000000400666.
+
+0000000000400666 <main>:
+  400666:	55                   	push   %rbp
+  400667:	48 89 e5             	mov    %rsp,%rbp
+  40066a:	48 83 ec 30          	sub    $0x30,%rsp
+  40066e:	89 7d dc             	mov    %edi,-0x24(%rbp)
+  400671:	48 89 75 d0          	mov    %rsi,-0x30(%rbp)
+  400675:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%rbp)
+  40067c:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%rbp)
+  400683:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%rbp)
+  40068a:	c6 45 ea 20          	movb   $0x20,-0x16(%rbp)
+  40068e:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
+  400692:	48 83 c0 08          	add    $0x8,%rax
+  400696:	48 8b 00             	mov    (%rax),%rax
+  400699:	be d4 07 40 00       	mov    $0x4007d4,%esi
+  40069e:	48 89 c7             	mov    %rax,%rdi
+  4006a1:	e8 9a fe ff ff       	callq  400540 <fopen@plt>
+  4006a6:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+  4006aa:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  4006ae:	48 89 c7             	mov    %rax,%rdi
+  4006b1:	e8 6a fe ff ff       	callq  400520 <fgetc@plt>
+  4006b6:	88 45 eb             	mov    %al,-0x15(%rbp)
+  4006b9:	80 7d eb ff          	cmpb   $0xff,-0x15(%rbp)
+  4006bd:	74 5f                	je     40071e <main+0xb8>
+  4006bf:	83 45 f4 01          	addl   $0x1,-0xc(%rbp)
+  4006c3:	e8 88 fe ff ff       	callq  400550 <__ctype_b_loc@plt>
+  4006c8:	48 8b 00             	mov    (%rax),%rax
+  4006cb:	48 0f be 55 ea       	movsbq -0x16(%rbp),%rdx
+  4006d0:	48 01 d2             	add    %rdx,%rdx
+  4006d3:	48 01 d0             	add    %rdx,%rax
+  4006d6:	0f b7 00             	movzwl (%rax),%eax
+  4006d9:	0f b7 c0             	movzwl %ax,%eax
+  4006dc:	25 00 20 00 00       	and    $0x2000,%eax
+  4006e1:	85 c0                	test   %eax,%eax
+  4006e3:	74 26                	je     40070b <main+0xa5>
+  4006e5:	e8 66 fe ff ff       	callq  400550 <__ctype_b_loc@plt>
+  4006ea:	48 8b 00             	mov    (%rax),%rax
+  4006ed:	48 0f be 55 eb       	movsbq -0x15(%rbp),%rdx
+  4006f2:	48 01 d2             	add    %rdx,%rdx
+  4006f5:	48 01 d0             	add    %rdx,%rax
+  4006f8:	0f b7 00             	movzwl (%rax),%eax
+  4006fb:	0f b7 c0             	movzwl %ax,%eax
+  4006fe:	25 00 20 00 00       	and    $0x2000,%eax
+  400703:	85 c0                	test   %eax,%eax
+  400705:	75 04                	jne    40070b <main+0xa5>
+  400707:	83 45 f0 01          	addl   $0x1,-0x10(%rbp)
+  40070b:	0f b6 45 eb          	movzbl -0x15(%rbp),%eax
+  40070f:	88 45 ea             	mov    %al,-0x16(%rbp)
+  400712:	80 7d eb 0a          	cmpb   $0xa,-0x15(%rbp)
+  400716:	75 92                	jne    4006aa <main+0x44>
+  400718:	83 45 ec 01          	addl   $0x1,-0x14(%rbp)
+  40071c:	eb 8c                	jmp    4006aa <main+0x44>
+  40071e:	90                   	nop
+  40071f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  400723:	48 89 c7             	mov    %rax,%rdi
+  400726:	e8 d5 fd ff ff       	callq  400500 <fclose@plt>
+  40072b:	8b 4d f4             	mov    -0xc(%rbp),%ecx
+  40072e:	8b 55 f0             	mov    -0x10(%rbp),%edx
+  400731:	8b 45 ec             	mov    -0x14(%rbp),%eax
+  400734:	89 c6                	mov    %eax,%esi
+  400736:	bf d6 07 40 00       	mov    $0x4007d6,%edi
+  40073b:	b8 00 00 00 00       	mov    $0x0,%eax
+  400740:	e8 cb fd ff ff       	callq  400510 <printf@plt>
+  400745:	b8 00 00 00 00       	mov    $0x0,%eax
+  40074a:	c9                   	leaveq 
+  40074b:	c3                   	retq   
+  40074c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+
+4.Do you see the stack segment anywhere? What about the heap? Explain.
+
+I can not see stack and heap segment.

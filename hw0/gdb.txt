@@ -1,0 +1,66 @@
+1.What is the value of argv?
+
+$1 = (char **) 0x7fffffffde88
+
+
+2.What is pointed to by argv?
+
+$2 = 0x7fffffffe245 "/home/aladdin/Desktop/hw0/wc"
+
+
+3.What is the address of the function main?
+
+main in section .text of /home/aladdin/Desktop/hw0/wc
+
+
+4.Try info stack. Explain what you see.
+
+#0  __libc_start_main (main=0x400666 <main>, argc=2, argv=0x7fffffffde88, 
+    init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, 
+    stack_end=0x7fffffffde78) at ../csu/libc-start.c:325
+#1  0x0000000000400599 in _start ()
+
+
+5.Try info frame. Explain what you see.
+
+Stack level 0, frame at 0x7fffffffde70:
+ rip = 0x7ffff7a2e830 in __libc_start_main (../csu/libc-start.c:325); 
+    saved rip = 0x400599
+ called by frame at 0x0
+ source language c.
+ Arglist at 0x7fffffffdda8, args: main=0x400666 <main>, argc=2, 
+    argv=0x7fffffffde88, init=<optimized out>, fini=<optimized out>, 
+    rtld_fini=<optimized out>, stack_end=0x7fffffffde78
+ Locals at 0x7fffffffdda8, Previous frame's sp is 0x7fffffffde70
+ Saved registers:
+  rbx at 0x7fffffffde40, rbp at 0x7fffffffde48, r12 at 0x7fffffffde50,
+  r13 at 0x7fffffffde58, r14 at 0x7fffffffde60, rip at 0x7fffffffde68
+
+
+6.Try info registers.
+
+rax            0x0	0
+rbx            0x0	0
+rcx            0x7ffffff9	2147483641
+rdx            0x7ffff7dd3780	140737351858048
+rsi            0x0	0
+rdi            0x7ffff7dd2620	140737351853600
+rbp            0x400750	0x400750 <__libc_csu_init>
+rsp            0x7fffffffddb0	0x7fffffffddb0
+r8             0x0	0
+r9             0x6	6
+r10            0x0	0
+r11            0xffffffffffffffff	-1
+r12            0x400570	4195696
+r13            0x7fffffffde80	140737488346752
+r14            0x0	0
+r15            0x0	0
+rip            0x7ffff7a2e830	0x7ffff7a2e830 <__libc_start_main+240>
+eflags         0x202	[ IF ]
+cs             0x33	51
+ss             0x2b	43
+ds             0x0	0
+es             0x0	0
+fs             0x0	0
+
+
