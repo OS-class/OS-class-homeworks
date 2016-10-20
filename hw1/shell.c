@@ -8,6 +8,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <termios.h>
+#include <fcntl.h>
 #include <unistd.h>
 
 #include "tokenizer.h"
@@ -29,6 +30,8 @@ pid_t shell_pgid;
 
 int cmd_exit(struct tokens *tokens);
 int cmd_help(struct tokens *tokens);
+int cmd_cd(struct tokens *tokens);
+int cmd_pwd(struct tokens *tokens);
 
 /* Built-in command functions take token array (see parse.h) and return int */
 typedef int cmd_fun_t(struct tokens *tokens);
@@ -43,7 +46,10 @@ typedef struct fun_desc {
 fun_desc_t cmd_table[] = {
   {cmd_help, "?", "show this help menu"},
   {cmd_exit, "exit", "exit the command shell"},
+  {cmd_cd, "cd", "change the directory"},
+  {cmd_pwd, "pwd", "print working directory"}
 };
+
 
 /* Prints a helpful description for the given command */
 int cmd_help(unused struct tokens *tokens) {
@@ -57,6 +63,22 @@ int cmd_exit(unused struct tokens *tokens) {
   exit(0);
 }
 
+int cmd_cd(unused struct tokens *tokens) {
+  // error with dereferencing
+  if(tokens_get_length(tokens) >= 2) {
+    chdir(tokens_get_token(tokens, 1));
+    return 1;
+  }
+  else return -1;
+}
+
+int cmd_pwd(unused struct tokens *tokens) {
+  char current[1024];
+  getcwd(current, sizeof(current));
+  printf("%s\n", current);
+  return 1;
+}
+
 /* Looks up the built-in command, if it exists. */
 int lookup(char cmd[]) {
   for (unsigned int i = 0; i < sizeof(cmd_table) / sizeof(fun_desc_t); i++)
@@ -64,7 +86,11 @@ int lookup(char cmd[]) {
       return i;
   return -1;
 }
-
+/*
+void signal_handler(int sign_num) {
+  exit(0);
+}
+*/
 /* Intialization procedures for this shell */
 void init_shell() {
   /* Our shell is connected to standard input. */
@@ -92,6 +118,9 @@ void init_shell() {
 }
 
 int main(unused int argc, unused char *argv[]) {
+  
+  signal(SIGINT, signal_handler);
+
   init_shell();
 
   static char line[4096];
@@ -104,15 +133,75 @@ int main(unused int argc, unused char *argv[]) {
   while (fgets(line, 4096, stdin)) {
     /* Split our line into words. */
     struct tokens *tokens = tokenize(line);
-
-    /* Find which built-in function to run. */
     int fundex = lookup(tokens_get_token(tokens, 0));
+    int tokens_len = tokens_get_length(tokens), status, wait_process = 1;
+
+    if(tokens_get_token(tokens, (size_t)(tokens_get_length(tokens)-1))[0] == '&') {
+      wait_process = 0;
+      tokens_len -= 1;
+    }
 
     if (fundex >= 0) {
       cmd_table[fundex].fun(tokens);
-    } else {
+    } 
+    else {
       /* REPLACE this to run commands as programs. */
-      fprintf(stdout, "This shell doesn't know how to run programs.\n");
+      if(tokens_len >= 1) {
+        pid_t pid = fork();
+        if(pid == -1) {
+          fprintf(stderr, "can't create child process");
+        }
+        else if(pid == 0) {
+          char *argv[50 + 2];
+          for(size_t i = 0; i < (50 <= tokens_len ? 50 : tokens_len); ++i) {
+            argv[i] = tokens_get_token(tokens, i);
+          }
+          argv[(50 <= tokens_len ? 50 : tokens_len)] = NULL;
+
+          if(tokens_len == 3 && argv[1][0] == '>') {
+            int out;
+            if((out = open(argv[2], O_RDWR|O_CREAT|O_APPEND)) == -1)  
+              fprintf(stderr, "cannot access file");
+            else 
+              dup2(out, 1); // maybe some errors here (duplicate problems)
+            argv[1] = NULL;
+          }
+          if(tokens_len == 3 && argv[1][0] == '<') {
+            int in;
+            if((in = open(argv[2], O_RDONLY|S_IRUSR)) == -1)
+              fprintf(stderr, "cannot access file");
+            else
+              dup2(in, 0); // also maybe some errors here (duplicate problems)
+            argv[1] = NULL;
+          }
+          
+          if(access(argv[0], F_OK) != -1 && access(argv[0], X_OK) != -1) {
+            execv(argv[0], argv);
+          }
+          else {
+              char *env = getenv("PATH");
+              char *temp;
+              while( (temp = strsep(&env, ":")) != NULL ) {
+                  char temp_pd[1024];  //why we cant make it pointer 
+                  strcpy(temp_pd, temp); 
+                  strcat(temp_pd, "/");
+                  strcat(temp_pd , argv[0]);
+                  if(access(temp_pd, F_OK) != -1 && access(temp_pd, X_OK) != -1) {
+                    strcpy(argv[0], temp_pd);
+                    execv(temp_pd, argv);
+                  }
+              }
+          }
+          _exit(0); // exit child process
+        }
+        else {
+          if(wait_process != 0) {
+            wait(&status); // wait child process
+          } 
+        }
+      }
+      else 
+        fprintf(stdout, "This shell doesn't know how to run programs.\n");
     }
 
     if (shell_is_interactive)
