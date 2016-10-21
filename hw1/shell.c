@@ -166,7 +166,7 @@ int main(unused int argc, unused char *argv[]) {
               dup2(out, 1); // maybe some errors here (duplicate problems)
             argv[1] = NULL;
           }
-          if(tokens_len == 3 && argv[1][0] == '<') {
+          else if(tokens_len == 3 && argv[1][0] == '<') {
             int in;
             if((in = open(argv[2], O_RDONLY|S_IRUSR)) == -1)
               fprintf(stderr, "cannot access file");
